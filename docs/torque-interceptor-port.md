@@ -92,3 +92,15 @@ checksum support needed (matches the existing CAM_LKAS builder style).
 - NoFSC / NoMRCC / ManualTransmission toggles — Stage B scope questions.
 - konik.ai redirects, updater/stats changes, starpilot features, PC-build
   hacks — MoreTore infra, not zoompilot's.
+
+## As-built addendum (Stage A)
+
+- The toggle is wired at fingerprint time through the sunnypilot car-params flow
+  (`initialize_params` key list -> `_initialize_torque_interceptor` in
+  `opendbc/sunnypilot/car/interfaces.py`), before the CAN parsers are built, so
+  the TI body parser registers on the same pass.
+- The hook also clears `dashcamOnly` (a GEN1 car with TI is controllable) and
+  the stock-path steering tune stays on the car's own branch
+  (`CarControllerParams` excludes the TI flag from the steer-to-zero EPS gate).
+- The toggle UI is `brands/mazda.py` (confirm dialog on enable, onroad cycle on
+  change). Param key `TorqueInterceptorEnabled`, default OFF.
