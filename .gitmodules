@@ -1,13 +1,13 @@
-# zoompilot develop: opendbc submodule served from the zoompilot org fork
-# (zoompilot/opendbc). Touch this file to force `git submodule sync` to rewrite
-# cached URLs on devices upgrading from snapshots that pointed at
-# zephleggett/opendbc-sunnypilot.git or zephleggett/opendbc.git.
+# mzdpilot: opendbc and panda are served from the mzdpilot org (they carry the
+# torque interceptor changes). Touch this file to force `git submodule sync` to
+# rewrite cached URLs on devices upgrading from zoompilot snapshots that pointed
+# at zoompilot/opendbc or sunnyhaibin/panda.
 [submodule "panda"]
   path = panda
-  url = https://github.com/sunnyhaibin/panda.git
+  url = https://github.com/mzdpilot/panda.git
 [submodule "opendbc"]
   path = opendbc_repo
-  url = https://github.com/zoompilot/opendbc.git
+  url = https://github.com/mzdpilot/opendbc.git
 [submodule "msgq"]
   path = msgq_repo
   url = https://github.com/sunnypilot/msgq.git
