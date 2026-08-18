@@ -104,3 +104,29 @@ checksum support needed (matches the existing CAM_LKAS builder style).
   (`CarControllerParams` excludes the TI flag from the steer-to-zero EPS gate).
 - The toggle UI is `brands/mazda.py` (confirm dialog on enable, onroad cycle on
   change). Param key `TorqueInterceptorEnabled`, default OFF.
+
+## Stage B addendum (TI2 / GEN2 / GEN3, as-built)
+
+- Safety param bit map (final): LONG=1, GEN2=2, GEN3=4, TORQUE_INTERCEPTOR=8,
+  GEN1=16. MoreTore's GEN1=1 collided with zoompilot LONG, so GEN1 moved to 16;
+  panda main.c gates CAN_MODE_OBD_CAN2 on GEN1 && TI (TI2 uses the aux bus as-is).
+- New platforms: CX-8 (GEN1), Mazda 3 2019-24 / CX-30 / CX-50 (GEN2), Mazda 3
+  2024-26 / CX-30 23-26 (GEN3). MAZDA_3_2023 ships with no fingerprint data yet
+  (MoreTore has none either); CX_30_2023 matches by CAN fingerprint.
+- GEN2 longitudinal comes from the TI2 device (ACC 0x220 echo-modify, 50 Hz, with
+  the electric-brake hold/resume frame counters). MoreTore enables it
+  unconditionally; zoompilot gates the whole TI2 stack behind the same
+  TorqueInterceptorEnabled toggle — without it a GEN2/GEN3 car stays dashcam-only.
+- GEN3 is steering-only (MoreTore parity: no longitudinal there yet).
+- Checksums: mazda_2019/mazda_2023 prefixes wired in can/dbc.py
+  (MAZDA2019_CHECKSUM, additive with per-address seeds 0x2a/0x53). The python
+  parser/packer needs no C++ changes. mazda_2017 is deliberately NOT wired — its
+  signals are named CHKSM and stock behavior stays bit-identical.
+- Deviations from StarPilot-testing, on purpose: the fwd hook blocks 0x249 on
+  every bus (SP has no gen2/3 fwd hook); cancel/resume buttons, HUD alerts, ICBM,
+  and alpha-long are GEN1-gated; GEN2 reports the ACC wire value through
+  actuatorsOutput.accel; BlendedACC and the CEStatus filter stay excluded.
+- Known follow-up: the GEN2 ACC frame is allowlisted without a panda-side accel
+  range check (SP parity; stock-echo frames must pass unchanged). Revisit with
+  hardware. centerToFront stays at the zoompilot-global 0.41 where MoreTore used
+  0.38 on some GEN2 platforms.
