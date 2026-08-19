@@ -62,10 +62,9 @@ Other openpilot software scans the same folder. It uploads every file without
 the mark to its own backend. Software with the comma backend sends those files
 to Comma Connect. This includes drives that mzdpilot recorded.
 
-So, before you install other openpilot software on a device that runs mzdpilot:
-
-1. Use Settings → Software → Uninstall, or
-2. fully re-flash the device at [flash.comma.ai](https://flash.comma.ai).
+So, before you install other openpilot software on a device that runs mzdpilot,
+fully re-flash the device at [flash.comma.ai](https://flash.comma.ai).
+Settings → Software → Uninstall does not wipe the drives.
 
 Never clone a different fork over the old one by SSH. That method keeps the
 drives and the params. The new software can then upload every drive mzdpilot
@@ -73,8 +72,7 @@ never uploaded.
 
 What wipes the drives:
 
-- Settings → Software → Uninstall: yes. It erases all of `/data` and formats
-  the data partition again. Params, SSH keys, and calibration are erased too.
+- Settings → Software → Uninstall: no. It does not wipe the drives.
 - Full re-flash at flash.comma.ai: yes. It erases every partition except
   `persist`.
 
@@ -85,7 +83,7 @@ What does not wipe the drives:
 - SSH clone-over of another fork: no. `/data/media/0/realdata` and
   `/data/params` stay in place.
 
-Sell or give the device away? Uninstall first.
+Sell or give the device away? Fully re-flash it first.
 
 Drives that were already on the device when you installed mzdpilot stay there.
 Any drive the old software never uploaded will upload to konik.
