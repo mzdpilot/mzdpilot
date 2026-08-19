@@ -40,6 +40,10 @@ def register(show_spinner=False) -> str | None:
     with open(Paths.persist_root()+"/comma/dongle_id") as f:
       dongle_id = f.read().strip()
 
+  if dongle_id == UNREGISTERED_DONGLE_ID:
+    # last registration attempt failed (e.g. backend unreachable): retry this boot
+    dongle_id = None
+
   # Create registration token, in the future, this key will make JWTs directly
   jwt_algo, private_key, public_key = get_key_pair()
 

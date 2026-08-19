@@ -74,3 +74,14 @@ class TestRegistration:
     assert m.call_count == 1
     assert dongle == UNREGISTERED_DONGLE_ID
     assert self.params.get("DongleId") == dongle
+
+  def test_retry_after_failed_registration(self, mocker):
+    # a stored UNREGISTERED_DONGLE_ID retries registration instead of staying unregistered
+    self._generate_keys()
+    self.params.put("DongleId", UNREGISTERED_DONGLE_ID, block=True)
+    m = mocker.patch("openpilot.system.athena.registration.api_get", autospec=True)
+    dongle = "DONGLE_ID_123"
+    m.return_value = MockResponse(json.dumps({'dongle_id': dongle}), 200)
+    assert register() == dongle
+    assert m.call_count == 1
+    assert self.params.get("DongleId") == dongle
