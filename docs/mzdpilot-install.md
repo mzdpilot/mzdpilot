@@ -16,7 +16,7 @@ URLs working after a rename, so both names reach the same code.
 
 - The TI feature is **off by default**. Enable it only with the device
   installed: Settings → Vehicle → Torque Interceptor (Experimental).
-- The `torque-interceptor` branch is source code, not a prebuilt release.
+- The `ti2` branch is source code, not a prebuilt release.
   A device compiles it on first boot, the same way a zoompilot `develop`
   install works.
 - Large files (models, fonts, sounds) fetch from the sunnypilot public
@@ -29,7 +29,7 @@ SSH into the device, then:
 ```
 cd /data
 mv openpilot openpilot.bak   # keep the previous install
-git clone -b torque-interceptor --recurse-submodules \
+git clone -b ti2 --recurse-submodules \
   https://github.com/mzdpilot/mzdpilot.git openpilot
 cd openpilot
 git lfs pull --exclude openpilot/selfdrive/modeld/models/big_driving_supercombo.onnx
