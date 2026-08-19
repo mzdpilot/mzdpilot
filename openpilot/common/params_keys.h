@@ -165,6 +165,8 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"InteractivityTimeout", {PERSISTENT | BACKUP, INT, "0"}},
     {"IsDevelopmentBranch", {CLEAR_ON_MANAGER_START, BOOL}},
     {"IsReleaseSpBranch", {CLEAR_ON_MANAGER_START, BOOL}},
+    // mzdpilot: one-time markers for the move off the comma backend (see sunnypilot/system/params_migration.py)
+    {"KonikRegistrationMigrated", {PERSISTENT, BOOL}},
     {"LastGPSPositionLLK", {PERSISTENT, STRING}},
     {"LeadDepartAlert", {PERSISTENT | BACKUP, BOOL, "0"}},
     {"MaxTimeOffroad", {PERSISTENT | BACKUP, INT, "1800"}},
@@ -211,9 +213,10 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"ParamsVersion", {PERSISTENT, INT}},
     {"SunnylinkCache_Roles", {PERSISTENT, STRING}},
     {"SunnylinkCache_Users", {PERSISTENT, STRING}},
+    {"SunnylinkDisabledMigrated", {PERSISTENT, BOOL}},
     {"SunnylinkDongleId", {PERSISTENT, STRING}},
     {"SunnylinkdPid", {PERSISTENT, INT}},
-    {"SunnylinkEnabled", {PERSISTENT, BOOL, "1"}},
+    {"SunnylinkEnabled", {PERSISTENT, BOOL, "0"}},
     {"SunnylinkTempFault", {CLEAR_ON_MANAGER_START | CLEAR_ON_OFFROAD_TRANSITION, BOOL, "0"}},
 
     // Backup Manager params
