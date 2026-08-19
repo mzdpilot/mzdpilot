@@ -15,8 +15,7 @@ if gui_app.sunnypilot_ui():
 # Description constants
 DESCRIPTIONS = {
   'enable_adb': tr_noop(
-    "ADB (Android Debug Bridge) allows connecting to your device over USB or over the network. " +
-    "See https://docs.comma.ai/how-to/connect-to-comma for more info."
+    "ADB (Android Debug Bridge) allows connecting to your device over USB or over the network."
   ),
   'ssh_key': tr_noop(
     "Warning: This grants SSH access to all public keys in your GitHub settings. Never enter a GitHub username " +

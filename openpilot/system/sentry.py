@@ -114,7 +114,13 @@ def get_properties() -> tuple[str, str, str]:
   return dongle_id, git_username, sunnylink_dongle_id
 
 
+SENTRY_ENABLED = False  # mzdpilot: crash reports never leave the device
+
+
 def init(project: SentryProject) -> bool:
+  if not SENTRY_ENABLED:
+    return False
+
   build_metadata = get_build_metadata()
 
   env = build_metadata.channel_type

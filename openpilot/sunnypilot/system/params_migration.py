@@ -5,8 +5,10 @@ This file is part of sunnypilot and is licensed under the MIT License.
 See the LICENSE.md file in the root directory for more details.
 """
 import json
+from pathlib import Path
 
 from openpilot.common.basedir import BASEDIR
+from openpilot.common.hardware.hw import Paths
 from openpilot.common.swaglog import cloudlog
 from openpilot.common.utils import run_cmd, run_cmd_default
 from openpilot.sunnypilot.selfdrive.car.sync_sunnylink_params import CAR_LIST_JSON_OUT
@@ -90,6 +92,25 @@ def _migrate_zoompilot_channel(_params):
   cloudlog.info(f"params_migration: UpdaterTargetBranch set to {ZOOMPILOT_BRANCH!r} (on {branch!r})")
 
 
+def _migrate_off_comma_backend(_params):
+  """mzdpilot uses konik as its backend and never talks to comma. One-shot:
+  turn sunnylink off and drop the comma-issued dongle id so the device
+  registers with konik. register() retries on later boots while konik is
+  unreachable."""
+  if not _params.get_bool("SunnylinkDisabledMigrated"):
+    _params.put_bool("SunnylinkEnabled", False, block=True)
+    _params.put_bool("SunnylinkDisabledMigrated", True, block=True)
+    cloudlog.info("params_migration: sunnylink disabled")
+
+  if not _params.get_bool("KonikRegistrationMigrated"):
+    _params.remove("DongleId")
+    persist_dongle = Path(Paths.persist_root()) / "comma" / "dongle_id"
+    if persist_dongle.is_file():
+      persist_dongle.unlink()
+    _params.put_bool("KonikRegistrationMigrated", True, block=True)
+    cloudlog.info("params_migration: comma dongle id cleared, next registration goes to konik")
+
+
 def run_migration(_params):
   # migrate OnroadScreenOffBrightness
   if _params.get("OnroadScreenOffBrightnessMigrated") != ONROAD_BRIGHTNESS_MIGRATION_VERSION:
@@ -128,3 +149,8 @@ def run_migration(_params):
     _migrate_zoompilot_channel(_params)
   except Exception as e:
     cloudlog.exception(f"Error migrating to the zoompilot channel: {e}")
+
+  try:
+    _migrate_off_comma_backend(_params)
+  except Exception as e:
+    cloudlog.exception(f"Error migrating off the comma backend: {e}")
