@@ -47,6 +47,17 @@ git submodule update --init opendbc_repo panda
 First boot compiles the software. Confirm the TI toggle appears under
 Settings → Vehicle after the car is fingerprinted (onroad once).
 
+## Before you switch away
+
+Do not clone a different fork over this install by SSH. Drives that mzdpilot
+did not upload stay on the device. The new software can upload them to Comma
+Connect. Use Settings → Software → Uninstall first. It erases all drives,
+params, and SSH keys. A full re-flash at flash.comma.ai also wipes them.
+AGNOS updates do not. See `docs/mzdpilot-konik.md` for details.
+
+Drives that were on the device before this install stay there. Any drive the
+old software never uploaded will upload to konik.
+
 ## Wiring reminder for the TI device
 
 The TI1 sits on the comma power RJ45 chain. The panda switches its bus 1
