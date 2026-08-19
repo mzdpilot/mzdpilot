@@ -52,6 +52,44 @@ must generate a new key pair, or the two devices share one identity.
   disabled (`openpilot/system/sentry.py`).
 - PC tools work against konik: `API_HOST=https://api.konik.ai ./tools/cabana <route>`.
 
+## Switching forks
+
+Drives wait on the device until they are uploaded. If konik is unreachable,
+drives are not uploaded. They stay in `/data/media/0/realdata` with no
+"uploaded" mark. When konik is reachable again, mzdpilot uploads them.
+
+Other openpilot software scans the same folder. It uploads every file without
+the mark to its own backend. Software with the comma backend sends those files
+to Comma Connect. This includes drives that mzdpilot recorded.
+
+So, before you install other openpilot software on a device that runs mzdpilot:
+
+1. Use Settings → Software → Uninstall, or
+2. fully re-flash the device at [flash.comma.ai](https://flash.comma.ai).
+
+Never clone a different fork over the old one by SSH. That method keeps the
+drives and the params. The new software can then upload every drive mzdpilot
+never uploaded.
+
+What wipes the drives:
+
+- Settings → Software → Uninstall: yes. It erases all of `/data` and formats
+  the data partition again. Params, SSH keys, and calibration are erased too.
+- Full re-flash at flash.comma.ai: yes. It erases every partition except
+  `persist`.
+
+What does not wipe the drives:
+
+- AGNOS updates and AGNOS system-only re-flashes: no. They do not touch
+  `/data`.
+- SSH clone-over of another fork: no. `/data/media/0/realdata` and
+  `/data/params` stay in place.
+
+Sell or give the device away? Uninstall first.
+
+Drives that were already on the device when you installed mzdpilot stay there.
+Any drive the old software never uploaded will upload to konik.
+
 ## Out of scope
 
 AGNOS images and the setup recovery flow still come from comma servers. This
